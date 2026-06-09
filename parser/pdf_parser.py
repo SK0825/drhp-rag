@@ -139,7 +139,14 @@ def save_chunks(chunks, company_name):
 
 def parse_all_pdfs():
     os.makedirs(PARSED_DIR, exist_ok=True)
-    pdf_files = [f for f in os.listdir(RAW_PDF_DIR) if f.lower().endswith(".pdf")]
+    existing = [f.replace("_chunks.json", "") for f in os.listdir(CHUNKS_DIR) if f.endswith("_chunks.json")]
+    pdf_files = [f for f in os.listdir(RAW_PDF_DIR) 
+                 if f.lower().endswith(".pdf") 
+                 and os.path.splitext(f)[0].lower().replace(" ", "_") not in existing]
+    if not pdf_files:
+        print("All PDFs already parsed. Nothing to do.")
+    else:
+        print(f"Found {len(pdf_files)} new PDFs to parse")
     print(f"Found {len(pdf_files)} PDFs to parse")
 
     all_stats = []

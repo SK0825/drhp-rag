@@ -420,23 +420,25 @@ elif mode == "📤 Upload PDF":
     if uploaded:
         st.info(f"File: {uploaded.name} ({uploaded.size / 1024 / 1024:.1f} MB)")
         if st.button("Process & Index", type="primary"):
+            st.info("⏳ This will take 5-10 minutes depending on PDF size. Please keep this tab open and do not refresh.")
             with st.spinner("Saving file..."):
                 save_path, company_name = process_uploaded_pdf(uploaded)
                 st.success(f"Saved to {save_path}")
-
             with st.spinner("Parsing PDF..."):
                 result = subprocess.run(
                     [sys.executable, "parser/pdf_parser.py"],
-                    capture_output=True, text=True, cwd=os.path.dirname(os.path.dirname(__file__))
+                    capture_output=True, text=True,
+                    cwd=os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
                 )
-                st.code(result.stdout[-500:] if result.stdout else "Done")
+                st.code(result.stdout[-500:] if result.stdout else result.stderr[-500:] if result.stderr else "Done")
 
             with st.spinner("Embedding and indexing (this takes a few minutes)..."):
                 result = subprocess.run(
                     [sys.executable, "ingestion/embedder.py"],
-                    capture_output=True, text=True, cwd=os.path.dirname(os.path.dirname(__file__))
+                    capture_output=True, text=True,
+                    cwd=os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
                 )
-                st.code(result.stdout[-500:] if result.stdout else "Done")
+            st.code(result.stdout[-500:] if result.stdout else result.stderr[-500:] if result.stderr else "Done")
 
             st.success("Done! New document indexed successfully.")
             st.session_state.index_version = st.session_state.get("index_version", 0) + 1

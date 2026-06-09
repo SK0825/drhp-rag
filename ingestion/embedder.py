@@ -5,7 +5,6 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import json
 import time
 import pickle
-import cohere
 from tqdm import tqdm
 from qdrant_client import QdrantClient
 from qdrant_client.models import (
@@ -13,11 +12,10 @@ from qdrant_client.models import (
 )
 from rank_bm25 import BM25Okapi
 from config import (
-    COHERE_API_KEY, EMBEDDING_MODEL, EMBEDDING_DIM,
+    GEMINI_API_KEY, EMBEDDING_MODEL, EMBEDDING_DIM,
     QDRANT_COLLECTION, CHUNKS_DIR
 )
 
-co = cohere.ClientV2(api_key=COHERE_API_KEY)
 qc = QdrantClient(":memory:")
 
 def load_all_chunks():
@@ -32,7 +30,6 @@ def load_all_chunks():
 
 def embed_chunks(texts, batch_size=50):
     from google import genai
-    from config import GEMINI_API_KEY
     client = genai.Client(api_key=GEMINI_API_KEY)
     all_embeddings = []
     for i in tqdm(range(0, len(texts), batch_size), desc="Embedding"):

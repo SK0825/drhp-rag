@@ -4,8 +4,6 @@ __pycache__/
 *.pyc
 *.pyo
 data/raw_pdfs/
-data/chunks/embeddings.pkl
-data/chunks/bm25_index.pkl
 db/
 scraper/__pycache__/
 check_gemini.py
