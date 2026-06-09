@@ -19,6 +19,183 @@ from config import (
     LLM_MODEL
 )
 
+# ── Entry page ─────────────────────────────────────────────────────
+def show_entry_page():
+    st.markdown("""
+        <style>
+        #MainMenu {visibility: hidden;}
+        footer {visibility: hidden;}
+        header {visibility: hidden;}
+        
+        .stApp {
+            background: linear-gradient(135deg, #0a0f1e 0%, #0d1635 50%, #0a0f1e 100%) !important;
+        }
+        
+        [data-testid="stAppViewContainer"] {
+            background: linear-gradient(135deg, #0a0f1e 0%, #0d1635 50%, #0a0f1e 100%) !important;
+        }
+        
+        [data-testid="stVerticalBlock"] {
+            background: transparent !important;
+        }
+
+        .main-title {
+            font-size: 4rem;
+            font-weight: 900;
+            text-align: center;
+            background: linear-gradient(90deg, #4f8ef7 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Georgia', serif;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            margin-bottom: 0.2rem;
+        }
+        
+        .main-subtitle {
+            font-size: 1.4rem;
+            text-align: center;
+            color: rgba(255,255,255,0.5);
+            font-style: italic;
+            margin-bottom: 1rem;
+            font-family: 'Georgia', serif;
+        }
+        
+        .desc-text {
+            text-align: center;
+            color: rgba(255,255,255,0.6);
+            font-size: 1rem;
+            line-height: 1.7;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .badge-row {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+
+        .badge {
+            background: rgba(79,142,247,0.12);
+            border: 1px solid rgba(79,142,247,0.3);
+            color: rgba(255,255,255,0.65);
+            padding: 0.3rem 0.85rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            letter-spacing: 0.06em;
+            font-weight: 500;
+        }
+
+        .feature-row {
+            display: flex;
+            justify-content: center;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+            margin: 0.5rem 0 1.5rem 0;
+        }
+
+        .feature-pill {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.6);
+            padding: 0.4rem 1rem;
+            border-radius: 10px;
+            font-size: 0.82rem;
+        }
+
+        .divider {
+            border: none;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            margin: 1rem auto;
+            width: 60%;
+        }
+
+        .disclaimer {
+            text-align: center;
+            color: rgba(255,255,255,0.2);
+            font-size: 0.72rem;
+            margin-top: 0.5rem;
+        }
+
+        div[data-testid="stButton"] > button {
+            background: linear-gradient(90deg, #4f8ef7, #7c6ff7) !important;
+            color: white !important;
+            border: none !important;
+            font-size: 1rem !important;
+            font-weight: 600 !important;
+            border-radius: 12px !important;
+            padding: 0.65rem 2rem !important;
+            letter-spacing: 0.03em !important;
+            transition: opacity 0.2s !important;
+        }
+
+        div[data-testid="stButton"] > button:hover {
+            opacity: 0.85 !important;
+        }
+
+        [data-testid="stMetricValue"] {
+            color: #4f8ef7 !important;
+            font-weight: 700 !important;
+        }
+
+        [data-testid="stMetricLabel"] {
+            color: rgba(255,255,255,0.4) !important;
+        }
+        </style>
+
+        <br><br>
+
+        <div class="main-title">DRHP Intelligence</div>
+        <div class="main-subtitle">AI-powered IPO research assistant</div>
+
+        <div class="desc-text">
+            Ask plain-English questions about Indian IPO documents.<br>
+            Every answer is grounded in real SEBI filings — no hallucination.
+        </div>
+
+        <br>
+
+        <div class="badge-row">
+            <span class="badge">RAG</span>
+            <span class="badge">SEBI FILINGS</span>
+            <span class="badge">IPO RESEARCH</span>
+            <span class="badge">GEMINI 2.5 FLASH</span>
+        </div>
+
+        <hr class="divider">
+
+        <div class="feature-row">
+            <span class="feature-pill">💬 Smart Q&A</span>
+            <span class="feature-pill">⚖️ Compare Companies</span>
+            <span class="feature-pill">📋 Auto Summary</span>
+            <span class="feature-pill">💰 Financial Extraction</span>
+            <span class="feature-pill">📤 Upload DRHPs</span>
+        </div>
+    """, unsafe_allow_html=True)
+
+    col_a, col_b, col_c = st.columns(3)
+    with col_a:
+        st.metric("Companies", "6 IPOs")
+    with col_b:
+        st.metric("Chunks", "4,240+")
+    with col_c:
+        st.metric("Model", "Gemini 2.5")
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    col1, col2, col3 = st.columns([1.2, 1, 1.2])
+    with col2:
+        if st.button("Enter Platform →", type="primary", use_container_width=True):
+            st.session_state.entered = True
+            st.rerun()
+
+    st.markdown('<p class="disclaimer">For informational purposes only · Not investment advice</p>',
+                unsafe_allow_html=True)
+
 st.set_page_config(page_title="DRHP Intelligence", page_icon="📄", layout="wide")
 from google import genai as google_genai
 gemini_client = google_genai.Client(api_key=GEMINI_API_KEY)
@@ -255,193 +432,200 @@ def export_chat_csv():
 # UI
 # ══════════════════════════════════════════════════════════════════
 
-with st.spinner("Loading indexes..."):
-    if "index_version" not in st.session_state:
-        st.session_state.index_version = 0
-    qc, bm25, chunks = load_indexes(st.session_state.index_version)
-    companies = get_companies(chunks)
+# ── App entry gate ─────────────────────────────────────────────────
+if "entered" not in st.session_state:
+    st.session_state.entered = False
 
-# ── Sidebar ────────────────────────────────────────────────────────
-with st.sidebar:
-    st.title("📄 DRHP Intelligence")
-    st.divider()
-    if st.button("🔄 Refresh indexes", use_container_width=True):
-        st.cache_resource.clear()
-        st.rerun()
+if not st.session_state.entered:
+    show_entry_page()
+else:
+    with st.spinner("Loading indexes..."):
+        if "index_version" not in st.session_state:
+            st.session_state.index_version = 0
+        qc, bm25, chunks = load_indexes(st.session_state.index_version)
+        companies = get_companies(chunks)
 
-    mode = st.radio("Mode", ["💬 Chat", "⚖️ Compare", "📋 Summary", "💰 Financials", "📤 Upload PDF"])
-    st.divider()
-
-    if mode == "💬 Chat":
-        company_filter = st.selectbox("Filter by company",
-            ["All Companies"] + [c.title() for c in companies])
+    # ── Sidebar ────────────────────────────────────────────────────────
+    with st.sidebar:
+        st.title("📄 DRHP Intelligence")
         st.divider()
-        st.markdown("**Sample questions:**")
-        samples = ["What are the key risk factors?", "What is the objects of the issue?",
-                   "Who are the promoters?", "What is the business overview?",
-                   "What are the financial highlights?", "What is the competitive landscape?"]
-        for s in samples:
-            if st.button(s, use_container_width=True, key=f"sample_{s}"):
-                st.session_state.sample_q = s
-
-    if mode == "💬 Chat" and st.session_state.get("messages"):
-        st.divider()
-        csv = export_chat_csv()
-        if csv:
-            st.download_button("⬇️ Export chat as CSV", csv,
-                file_name=f"drhp_chat_{datetime.now().strftime('%Y%m%d_%H%M')}.csv",
-                mime="text/csv", use_container_width=True)
-        if st.button("🗑️ Clear chat", use_container_width=True):
-            st.session_state.messages = []
+        if st.button("🔄 Refresh indexes", use_container_width=True):
+            st.cache_resource.clear()
             st.rerun()
 
-# ── Main area ──────────────────────────────────────────────────────
+        mode = st.radio("Mode", ["💬 Chat", "⚖️ Compare", "📋 Summary", "💰 Financials", "📤 Upload PDF"])
+        st.divider()
 
-# CHAT MODE
-if mode == "💬 Chat":
-    st.title("💬 Ask the DRHPs")
-    st.caption("Powered by hybrid RAG — dense search + BM25 + reranking")
+        if mode == "💬 Chat":
+            company_filter = st.selectbox("Filter by company",
+                ["All Companies"] + [c.title() for c in companies])
+            st.divider()
+            st.markdown("**Sample questions:**")
+            samples = ["What are the key risk factors?", "What is the objects of the issue?",
+                    "Who are the promoters?", "What is the business overview?",
+                    "What are the financial highlights?", "What is the competitive landscape?"]
+            for s in samples:
+                if st.button(s, use_container_width=True, key=f"sample_{s}"):
+                    st.session_state.sample_q = s
 
-    if "messages" not in st.session_state:
-        st.session_state.messages = []
+        if mode == "💬 Chat" and st.session_state.get("messages"):
+            st.divider()
+            csv = export_chat_csv()
+            if csv:
+                st.download_button("⬇️ Export chat as CSV", csv,
+                    file_name=f"drhp_chat_{datetime.now().strftime('%Y%m%d_%H%M')}.csv",
+                    mime="text/csv", use_container_width=True)
+            if st.button("🗑️ Clear chat", use_container_width=True):
+                st.session_state.messages = []
+                st.rerun()
 
-    for msg in st.session_state.messages:
-        with st.chat_message(msg["role"]):
-            st.markdown(msg["content"])
-            if msg["role"] == "assistant" and "sources" in msg:
+    # ── Main area ──────────────────────────────────────────────────────
+
+    # CHAT MODE
+    if mode == "💬 Chat":
+        st.title("💬 Ask the DRHPs")
+        st.caption("Powered by hybrid RAG — dense search + BM25 + RRF Fusion")
+
+        if "messages" not in st.session_state:
+            st.session_state.messages = []
+
+        for msg in st.session_state.messages:
+            with st.chat_message(msg["role"]):
+                st.markdown(msg["content"])
+                if msg["role"] == "assistant" and "sources" in msg:
+                    with st.expander("View sources"):
+                        for i, src in enumerate(msg["sources"]):
+                            st.markdown(f"**[{i+1}] {src['company'].title()} — {src['section']}**")
+                            st.caption(src["text"][:300] + "...")
+
+        question = st.chat_input("Ask anything about the DRHPs...")
+        if "sample_q" in st.session_state and not question:
+            question = st.session_state.pop("sample_q")
+
+        if question:
+            cf = None if company_filter == "All Companies" else company_filter.lower()
+            st.session_state.messages.append({
+                "role": "user", "content": question,
+                "timestamp": datetime.now().isoformat()
+            })
+            with st.chat_message("user"):
+                st.markdown(question)
+            with st.chat_message("assistant"):
+                with st.spinner("Searching and generating..."):
+                    answer, sources = run_query(question, cf, qc, bm25, chunks)
+                st.markdown(answer)
                 with st.expander("View sources"):
-                    for i, src in enumerate(msg["sources"]):
+                    for i, src in enumerate(sources):
                         st.markdown(f"**[{i+1}] {src['company'].title()} — {src['section']}**")
                         st.caption(src["text"][:300] + "...")
+            st.session_state.messages.append({
+                "role": "assistant", "content": answer, "sources": sources,
+                "timestamp": datetime.now().isoformat()
+            })
 
-    question = st.chat_input("Ask anything about the DRHPs...")
-    if "sample_q" in st.session_state and not question:
-        question = st.session_state.pop("sample_q")
+    # COMPARE MODE
+    elif mode == "⚖️ Compare":
+        st.title("⚖️ Company Comparison")
+        st.caption("Ask the same question across multiple companies simultaneously")
 
-    if question:
-        cf = None if company_filter == "All Companies" else company_filter.lower()
-        st.session_state.messages.append({
-            "role": "user", "content": question,
-            "timestamp": datetime.now().isoformat()
-        })
-        with st.chat_message("user"):
-            st.markdown(question)
-        with st.chat_message("assistant"):
-            with st.spinner("Searching and generating..."):
-                answer, sources = run_query(question, cf, qc, bm25, chunks)
-            st.markdown(answer)
-            with st.expander("View sources"):
-                for i, src in enumerate(sources):
-                    st.markdown(f"**[{i+1}] {src['company'].title()} — {src['section']}**")
-                    st.caption(src["text"][:300] + "...")
-        st.session_state.messages.append({
-            "role": "assistant", "content": answer, "sources": sources,
-            "timestamp": datetime.now().isoformat()
-        })
+        selected = st.multiselect("Select companies to compare",
+            [c.title() for c in companies], default=[c.title() for c in companies[:2]])
+        question = st.text_input("Question to compare across companies",
+            placeholder="e.g. What are the key risk factors?")
 
-# COMPARE MODE
-elif mode == "⚖️ Compare":
-    st.title("⚖️ Company Comparison")
-    st.caption("Ask the same question across multiple companies simultaneously")
+        if st.button("🔍 Compare", type="primary", disabled=not (selected and question)):
+            selected_lower = [s.replace(" ", "_").lower() for s in selected]
+            cols = st.columns(len(selected))
+            with st.spinner(f"Querying {len(selected)} companies..."):
+                results = run_comparison(question, selected_lower, qc, bm25, chunks)
+            for i, company in enumerate(selected_lower):
+                with cols[i]:
+                    st.subheader(company.replace("_", " ").title())
+                    st.markdown(results[company]["answer"])
+                    with st.expander("Sources"):
+                        for src in results[company]["sources"]:
+                            st.caption(f"**{src['section']}** — {src['text'][:200]}...")
 
-    selected = st.multiselect("Select companies to compare",
-        [c.title() for c in companies], default=[c.title() for c in companies[:2]])
-    question = st.text_input("Question to compare across companies",
-        placeholder="e.g. What are the key risk factors?")
+    # SUMMARY MODE
+    elif mode == "📋 Summary":
+        st.title("📋 Document Summary")
+        st.caption("One-click structured summary of any DRHP")
 
-    if st.button("🔍 Compare", type="primary", disabled=not (selected and question)):
-        selected_lower = [s.replace(" ", "_").lower() for s in selected]
-        cols = st.columns(len(selected))
-        with st.spinner(f"Querying {len(selected)} companies..."):
-            results = run_comparison(question, selected_lower, qc, bm25, chunks)
-        for i, company in enumerate(selected_lower):
-            with cols[i]:
-                st.subheader(company.replace("_", " ").title())
-                st.markdown(results[company]["answer"])
-                with st.expander("Sources"):
-                    for src in results[company]["sources"]:
-                        st.caption(f"**{src['section']}** — {src['text'][:200]}...")
+        company = st.selectbox("Select company", [c.title() for c in companies])
+        if st.button("Generate Summary", type="primary"):
+            with st.spinner(f"Summarizing {company}'s DRHP..."):
+                summary = generate_summary(company.lower(), qc, bm25, chunks)
+            for section, text in summary.items():
+                with st.expander(f"📌 {section}", expanded=True):
+                    st.markdown(text)
+            summary_text = "\n\n".join([f"## {s}\n{t}" for s, t in summary.items()])
+            st.download_button("⬇️ Download summary",
+                summary_text,
+                file_name=f"{company.lower()}_summary.txt",
+                mime="text/plain")
 
-# SUMMARY MODE
-elif mode == "📋 Summary":
-    st.title("📋 Document Summary")
-    st.caption("One-click structured summary of any DRHP")
+    # FINANCIALS MODE
+    elif mode == "💰 Financials":
+        st.title("💰 Financial Data Extractor")
+        st.caption("Extract key financial metrics from DRHPs automatically")
 
-    company = st.selectbox("Select company", [c.title() for c in companies])
-    if st.button("Generate Summary", type="primary"):
-        with st.spinner(f"Summarizing {company}'s DRHP..."):
-            summary = generate_summary(company.lower(), qc, bm25, chunks)
-        for section, text in summary.items():
-            with st.expander(f"📌 {section}", expanded=True):
-                st.markdown(text)
-        summary_text = "\n\n".join([f"## {s}\n{t}" for s, t in summary.items()])
-        st.download_button("⬇️ Download summary",
-            summary_text,
-            file_name=f"{company.lower()}_summary.txt",
-            mime="text/plain")
+        selected_cos = st.multiselect("Select companies",
+            [c.title() for c in companies], default=[c.title() for c in companies])
 
-# FINANCIALS MODE
-elif mode == "💰 Financials":
-    st.title("💰 Financial Data Extractor")
-    st.caption("Extract key financial metrics from DRHPs automatically")
+        if st.button("Extract Financials", type="primary", disabled=not selected_cos):
+            all_data = {}
+            progress = st.progress(0)
+            for i, company in enumerate(selected_cos):
+                with st.spinner(f"Extracting {company}..."):
+                    data = extract_financials(company.lower(), chunks)
+                    all_data[company] = data
+                progress.progress((i + 1) / len(selected_cos))
 
-    selected_cos = st.multiselect("Select companies",
-        [c.title() for c in companies], default=[c.title() for c in companies])
+            st.subheader("Extracted Metrics")
+            rows = []
+            for company, metrics in all_data.items():
+                row = {"Company": company}
+                row.update({k.replace("_", " ").title(): v for k, v in metrics.items()})
+                rows.append(row)
+            if rows:
+                df = pd.DataFrame(rows).set_index("Company")
+                st.dataframe(df, use_container_width=True)
+                st.download_button("⬇️ Download as CSV",
+                    df.to_csv(),
+                    file_name=f"drhp_financials_{datetime.now().strftime('%Y%m%d')}.csv",
+                    mime="text/csv")
 
-    if st.button("Extract Financials", type="primary", disabled=not selected_cos):
-        all_data = {}
-        progress = st.progress(0)
-        for i, company in enumerate(selected_cos):
-            with st.spinner(f"Extracting {company}..."):
-                data = extract_financials(company.lower(), chunks)
-                all_data[company] = data
-            progress.progress((i + 1) / len(selected_cos))
+    # UPLOAD MODE
+    elif mode == "📤 Upload PDF":
+        st.title("📤 Upload New DRHP")
+        st.caption("Add a new IPO document — it will be parsed and indexed automatically")
 
-        st.subheader("Extracted Metrics")
-        rows = []
-        for company, metrics in all_data.items():
-            row = {"Company": company}
-            row.update({k.replace("_", " ").title(): v for k, v in metrics.items()})
-            rows.append(row)
-        if rows:
-            df = pd.DataFrame(rows).set_index("Company")
-            st.dataframe(df, use_container_width=True)
-            st.download_button("⬇️ Download as CSV",
-                df.to_csv(),
-                file_name=f"drhp_financials_{datetime.now().strftime('%Y%m%d')}.csv",
-                mime="text/csv")
+        uploaded = st.file_uploader("Drop a DRHP PDF here", type=["pdf"])
+        if uploaded:
+            st.info(f"File: {uploaded.name} ({uploaded.size / 1024 / 1024:.1f} MB)")
+            if st.button("Process & Index", type="primary"):
+                st.info("⏳ This will take 5-10 minutes depending on PDF size. Please keep this tab open and do not refresh.")
+                with st.spinner("Saving file..."):
+                    save_path, company_name = process_uploaded_pdf(uploaded)
+                    st.success(f"Saved to {save_path}")
+                with st.spinner("Parsing PDF..."):
+                    result = subprocess.run(
+                        [sys.executable, "parser/pdf_parser.py"],
+                        capture_output=True, text=True,
+                        cwd=os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+                    )
+                    st.code(result.stdout[-500:] if result.stdout else result.stderr[-500:] if result.stderr else "Done")
 
-# UPLOAD MODE
-elif mode == "📤 Upload PDF":
-    st.title("📤 Upload New DRHP")
-    st.caption("Add a new IPO document — it will be parsed and indexed automatically")
-
-    uploaded = st.file_uploader("Drop a DRHP PDF here", type=["pdf"])
-    if uploaded:
-        st.info(f"File: {uploaded.name} ({uploaded.size / 1024 / 1024:.1f} MB)")
-        if st.button("Process & Index", type="primary"):
-            st.info("⏳ This will take 5-10 minutes depending on PDF size. Please keep this tab open and do not refresh.")
-            with st.spinner("Saving file..."):
-                save_path, company_name = process_uploaded_pdf(uploaded)
-                st.success(f"Saved to {save_path}")
-            with st.spinner("Parsing PDF..."):
-                result = subprocess.run(
-                    [sys.executable, "parser/pdf_parser.py"],
-                    capture_output=True, text=True,
-                    cwd=os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-                )
+                with st.spinner("Embedding and indexing (this takes a few minutes)..."):
+                    result = subprocess.run(
+                        [sys.executable, "ingestion/embedder.py"],
+                        capture_output=True, text=True,
+                        cwd=os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+                    )
                 st.code(result.stdout[-500:] if result.stdout else result.stderr[-500:] if result.stderr else "Done")
 
-            with st.spinner("Embedding and indexing (this takes a few minutes)..."):
-                result = subprocess.run(
-                    [sys.executable, "ingestion/embedder.py"],
-                    capture_output=True, text=True,
-                    cwd=os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-                )
-            st.code(result.stdout[-500:] if result.stdout else result.stderr[-500:] if result.stderr else "Done")
-
-            st.success("Done! New document indexed successfully.")
-            st.session_state.index_version = st.session_state.get("index_version", 0) + 1
-            st.cache_resource.clear()
-            if st.button("🔄 Reload app"):
-                st.rerun()
+                st.success("Done! New document indexed successfully.")
+                st.session_state.index_version = st.session_state.get("index_version", 0) + 1
+                st.cache_resource.clear()
+                if st.button("🔄 Reload app"):
+                    st.rerun()
